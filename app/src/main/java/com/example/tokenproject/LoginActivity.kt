@@ -1,5 +1,6 @@
 package com.example.tokenproject
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
@@ -7,11 +8,12 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.example.tokenproject.Common.Common
+import androidx.core.app.ActivityCompat
 import com.example.tokenproject.Retrofit2.ResultModel
 import com.example.tokenproject.Retrofit2.RetrofitUtil
 import com.example.tokenproject.Retrofit2.UserApi
@@ -22,6 +24,7 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
+    private val PERMISSION_ALLOW = 1
 
 
     private lateinit var id_edit: EditText
@@ -46,10 +49,34 @@ class LoginActivity : AppCompatActivity() {
 
     var asyncDialog : ProgressDialog? = null
     private var dialog: AlertDialog? = null
+
+    //필수권한
+    var REQUIRED_PERMISSIONS = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,  //저장소 접근
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
     @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) !== PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) !== PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(
+                this, arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,  // 저장공간
+                    Manifest.permission.READ_EXTERNAL_STORAGE  // 저장공간
+                ),
+                PERMISSION_ALLOW
+            )
+        }
 
         asyncDialog = ProgressDialog(this@LoginActivity)
 
