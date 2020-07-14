@@ -101,12 +101,21 @@ class MainActivity : AppCompatActivity() {
 
         var sharedPreferences : SharedPreferences = getSharedPreferences("tokenApp", Context.MODE_PRIVATE)
 
+        var tokenEditor : SharedPreferences.Editor = sharedPreferences.edit()
+
+
+
         var userId = sharedPreferences.getString("userId","")
 
-        FirebaseDatabase.getInstance().getReference()
+        FirebaseDatabase.getInstance().reference
 
 
-        val token: String? = FirebaseInstanceId.getInstance().getToken()
+        val token: String? = FirebaseInstanceId.getInstance().token
+
+        tokenEditor.putString("token",token)
+        tokenEditor.apply()
+
+
 
 
         val call: Call<ResultModel> =

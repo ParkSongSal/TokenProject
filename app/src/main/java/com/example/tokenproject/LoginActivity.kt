@@ -115,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
-        setting = getSharedPreferences("setting", Activity.MODE_PRIVATE)
+        setting = getSharedPreferences("tokenApp", Activity.MODE_PRIVATE)
         editor = setting?.edit()
 
 
@@ -137,7 +137,7 @@ class LoginActivity : AppCompatActivity() {
                 editor!!.putBoolean("chk_auto", true)
                 editor!!.apply()
             } else {
-                setting = getSharedPreferences("setting", Activity.MODE_PRIVATE)
+                setting = getSharedPreferences("tokenApp", Activity.MODE_PRIVATE)
                 editor = setting?.edit()
                 editor?.clear()
                 editor?.commit()

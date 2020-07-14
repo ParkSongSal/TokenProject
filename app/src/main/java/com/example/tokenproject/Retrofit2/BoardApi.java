@@ -29,7 +29,8 @@ public interface BoardApi {
                                    @Part("TITLE") RequestBody title,
                                    @Part("CONTENT") RequestBody content,
                                    @Part("DATE") RequestBody date,
-                                   @Part MultipartBody.Part image);
+                                   @Part MultipartBody.Part image,
+                                   @Part("TOKEN") RequestBody token);
 
 
 
@@ -39,7 +40,8 @@ public interface BoardApi {
     Call<ResponseBody> InsertBoard_NoImage(@Part("USER") RequestBody user,
                                            @Part("TITLE") RequestBody title,
                                            @Part("CONTENT") RequestBody content,
-                                           @Part("DATE") RequestBody date);
+                                           @Part("DATE") RequestBody date,
+                                           @Part("TOKEN") RequestBody token);
 
     // 게시판 Update (이미지 o)
     @Multipart

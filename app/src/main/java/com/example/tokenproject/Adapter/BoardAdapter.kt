@@ -16,13 +16,14 @@ import com.github.siyamed.shapeimageview.RoundedImageView
 import org.greenrobot.eventbus.EventBus
 
 class BoardAdapter(
-    private val context: Context,
-    dataList: List<BoardModel>?,
-    saveList: List<BoardModel>?
+    private var context: Context,
+    dataList: List<BoardModel>,
+    saveList: List<BoardModel>
 ) :
     RecyclerView.Adapter<BoardAdapter.ViewHolder?>() {
-    private lateinit var mData: List<BoardModel>
-    private lateinit var saveList: List<BoardModel>
+
+    private var mData: List<BoardModel> = dataList
+    private var saveList: List<BoardModel> = saveList
 
     //Event Bus 클래스
     class ItemClickEvent //this.id = id;
@@ -93,15 +94,6 @@ class BoardAdapter(
             this.user_txt = user_txt
             this.date_txt = date_txt
             this.reply_count = reply_count
-        }
-    }
-
-    init {
-        if (dataList != null) {
-            mData = dataList
-        }
-        if (saveList != null) {
-            this.saveList = saveList
         }
     }
 

@@ -84,22 +84,24 @@ class BoardInsertActivity : AppCompatActivity() {
 
     private var BoardSeq = 0
     private var id = ""
+    private var token =""
     var replyOnOff = 0
 
+    private var mIntent : Intent? = null
 
-
-    @SuppressLint("CommitPrefEdits")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board_insert)
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
-        setting = getSharedPreferences("setting", Activity.MODE_PRIVATE)
+        setting = getSharedPreferences("tokenApp", Activity.MODE_PRIVATE)
         editor = setting?.edit()
 
 
+
         id = setting?.getString("ID", "")!! //로그인계정
+        token = setting?.getString("token","")!!    //작성자 토큰
 
         init()
 
@@ -117,7 +119,7 @@ class BoardInsertActivity : AppCompatActivity() {
 
         mInsert_img!!.setOnClickListener { selectImage() }
 
-        intent = intent
+
 
         if (intent != null) {
             //Insert
@@ -308,30 +310,26 @@ class BoardInsertActivity : AppCompatActivity() {
         val TITLE = titleTxt!!.text.toString()
         val CONTENT = contentTxt!!.text.toString()
         val DATE: String = Common.nowDate("yyyy-MM-dd HH:mm:ss")
+        val TOKEN : String = token
         val userPart = RequestBody.create(MultipartBody.FORM, USER)
         val titlePart = RequestBody.create(MultipartBody.FORM, TITLE)
         val contentPart = RequestBody.create(MultipartBody.FORM, CONTENT)
         val datePart = RequestBody.create(MultipartBody.FORM, DATE)
+        val tokenPart = RequestBody.create(MultipartBody.FORM, TOKEN)
 
         val call: Call<ResponseBody>
         call = if (filePath != null) {
-            //var file3 : File = File(getPath(filePath))
-            Log.d("TAG","filePath getPath : ${filePath.path}" )
-            Log.d("TAG","filePath toString : ${filePath.toString()}" )
-            Log.d("TAG","filePath testPath : $testPath" )
-            var file3 = File(filePath.toString())
             val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath)
-            /*
-            val requestBody : RequestBody = RequestBody.create(MediaType.parse("image/*"),originalFile)
-            val body : MultipartBody.Part = MultipartBody.Part.createFormData("image",originalFile.name,requestBody)
-            */*/
-            //val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+
             val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+
             val file = MultipartBody.Part.createFormData("image", originalFile.name, imagePart)
-            mBoardApi!!.InsertBoard(userPart, titlePart, contentPart, datePart, file)
+
+            mBoardApi!!.InsertBoard(userPart, titlePart, contentPart, datePart, file, tokenPart)
         } else {
-            mBoardApi!!.InsertBoard_NoImage(userPart, titlePart, contentPart, datePart)
+            mBoardApi!!.InsertBoard_NoImage(userPart, titlePart, contentPart, datePart, tokenPart)
         }
+
 
 
         // Call<ResponseBody> call = apiInterface.uploadImage(titlePart,file);
@@ -340,9 +338,11 @@ class BoardInsertActivity : AppCompatActivity() {
                 call: Call<ResponseBody?>,
                 response: Response<ResponseBody?>
             ) {
-                intent = Intent(this@BoardInsertActivity, MainActivity::class.java)
+                /*intent = Intent(this@BoardInsertActivity, MainActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                startActivity(intent)
+                startActivity(intent)*/
+                editor?.putInt("fragInsert",0)
+                editor?.apply()
                 finish()
                 Toast.makeText(this@BoardInsertActivity, "등록되었습니다.", Toast.LENGTH_LONG).show()
             }
