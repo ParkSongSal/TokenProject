@@ -255,7 +255,7 @@ class FirstFragment : Fragment() {
         mIntent!!.putExtra("PATH", boardList[event.position].path)
         mIntent!!.putExtra("ReplyCount", boardList[event.position].reply_count)
         startActivity(mIntent)
-        
+
     }
 
 }
