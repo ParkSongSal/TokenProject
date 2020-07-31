@@ -115,14 +115,8 @@ class FirstFragment : Fragment() {
 
 
 
-        Log.d("TAG","onCreateView 호출 ")
         return view
 
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d("TAG","onDestroyView 호출 !!! ")
     }
 
     override fun onResume() {
@@ -131,37 +125,11 @@ class FirstFragment : Fragment() {
         var fragInsert = setting?.getInt("fragInsert", -1) // 로그인한 id셋팅
 
         if(fragInsert == 0){
-            Log.d("TAG","onResume 호출 !!! $fragInsert")
+            //Log.d("TAG","onResume 호출 !!! $fragInsert")
             getServerData()
         }else{
             Log.d("TAG","onResume 호출 !!! $fragInsert")
         }
-        Log.d("TAG","onResume 호출 !!! ")
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.d("TAG","onActivityCreated 호출 !!! ")
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.d("TAG","onStart 호출 !!! ")
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Log.d("TAG","onAttach 호출 !!! ")
-    }
-
-
-
-    override fun onPause() {
-        super.onPause()
-        /*ft.detach(fragment1)
-        ft.commit()*/
-        Log.d("TAG","onPause 호출 !!! ")
     }
 
 

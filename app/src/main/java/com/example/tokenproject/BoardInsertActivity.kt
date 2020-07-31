@@ -1,38 +1,40 @@
 package com.example.tokenproject
 
-import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toFile
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tokenproject.Common.Common
 import com.example.tokenproject.Common.Common.formatTimeString
-import com.example.tokenproject.Common.Common.getPath
 import com.example.tokenproject.Common.FileUtils
 import com.example.tokenproject.Model.BoardReplyModel
 import com.example.tokenproject.Retrofit2.BoardApi
 import com.example.tokenproject.Retrofit2.ResultBoard_Reply
 import com.example.tokenproject.Retrofit2.RetrofitBoard
 import com.github.siyamed.shapeimageview.RoundedImageView
+import com.opensooq.supernova.gligar.GligarPicker
 import com.psmstudio.user.mygwangju.new_Board.BoardReplyAdapter
 import com.stone.vega.library.VegaLayoutManager
+import kotlinx.android.synthetic.main.activity_board_insert.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -48,6 +50,7 @@ class BoardInsertActivity : AppCompatActivity() {
 
 
     private val IMG_REQUEST = 777
+    private val PICKER_REQUEST_CODE = 101
 
     private var bitmap: Bitmap? = null
     private var testPath : String? = null
@@ -74,7 +77,8 @@ class BoardInsertActivity : AppCompatActivity() {
     private  var mSubtitle_ll:LinearLayout? = null
 
     private val replyList: MutableList<BoardReplyModel>? = null
-
+    private var uriList : MutableList<String> = mutableListOf()
+    private var pathsList = emptyArray<String>()
     private var mAdapter: BoardReplyAdapter? = null
     private var dialog: AlertDialog? = null
 
@@ -89,6 +93,8 @@ class BoardInsertActivity : AppCompatActivity() {
 
     private var mIntent : Intent? = null
 
+
+    var count = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board_insert)
@@ -102,6 +108,7 @@ class BoardInsertActivity : AppCompatActivity() {
 
         id = setting?.getString("ID", "")!! //로그인계정
         token = setting?.getString("token","")!!    //작성자 토큰
+
 
         init()
 
@@ -119,6 +126,33 @@ class BoardInsertActivity : AppCompatActivity() {
 
         mInsert_img!!.setOnClickListener { selectImage() }
 
+        cameraIcon.setOnClickListener{
+            if (pathsList != null) {
+                Toast.makeText(this@BoardInsertActivity, "현재 이미지 개수 $count", Toast.LENGTH_SHORT).show()
+                if (count == 4) {
+                    Toast.makeText(this@BoardInsertActivity, "이미지는 최대 4장까지 선택가능합니다.", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    GligarPicker()
+                        .requestCode(PICKER_REQUEST_CODE)
+                        .limit(4 - count) // 최대 이미지 수
+                        .withActivity(this@BoardInsertActivity) //Activity
+                        //.withFragment -> Fragment
+                        // .disableCamera(false) -> 카메라 캡처를 사용할지
+                        // .cameraDirect(true) -> 바로 카메라를 실행할지
+                        .show()
+                }
+            } else {
+                GligarPicker()
+                    .requestCode(PICKER_REQUEST_CODE)
+                    .limit(4) // 최대 이미지 수
+                    .withActivity(this@BoardInsertActivity) //Activity
+                    //.withFragment -> Fragment
+                    // .disableCamera(false) -> 카메라 캡처를 사용할지
+                    // .cameraDirect(true) -> 바로 카메라를 실행할지
+                    .show()
+            }
+        }
 
 
         if (intent != null) {
@@ -133,6 +167,9 @@ class BoardInsertActivity : AppCompatActivity() {
                 dateTxt!!.visibility = View.GONE
                 mReply_OnOff!!.visibility = View.GONE
             } else {    //Update
+
+                //getData()
+
                 BoardSeq = intent.getIntExtra("Seq", 1) //글번호
                 Log.d("TAG", "글번호 ===> $BoardSeq")
                 val image_path = intent.getStringExtra("PATH")
@@ -192,7 +229,7 @@ class BoardInsertActivity : AppCompatActivity() {
 
         mBoardApi = RetrofitBoard().imageApi
 
-        getData()
+
 
         mInsertBtn!!.setOnClickListener {
             if (gbdata == 0) {
@@ -201,6 +238,7 @@ class BoardInsertActivity : AppCompatActivity() {
                 updateBoard(path)
             }
         }
+
     }
 
     fun init(){
@@ -259,7 +297,7 @@ class BoardInsertActivity : AppCompatActivity() {
         }
     }
 
-    private fun getData() {
+    /*private fun getData() {
         val Board_Seq = BoardSeq.toString()
         val boardSeqPart = RequestBody.create(MultipartBody.FORM, Board_Seq)
         val call: Call<List<ResultBoard_Reply>> =
@@ -300,7 +338,7 @@ class BoardInsertActivity : AppCompatActivity() {
                 ).show()
             }
         })
-    }
+    }*/
 
     //Insert
     private fun uploadImage(filePath: Uri?) {
@@ -438,6 +476,56 @@ class BoardInsertActivity : AppCompatActivity() {
             } catch (e: IOException) {
                 e.printStackTrace()
             }
+        }else if(requestCode == PICKER_REQUEST_CODE && resultCode == RESULT_OK && data != null){
+            pathsList =
+                data.extras?.getStringArray(GligarPicker.IMAGES_RESULT) as Array<String> // return list of selected images paths.
+            Log.d("TAG","uriList : $pathsList")
+
+            for (i in pathsList.indices) {
+                uriList.add(pathsList[i])
+                Log.d("TAG","uriList : $uriList")
+                //imagePathMap.put(i, pathsList[i]);
+                count++
+                setImage(pathsList[i])
+            }
+
+        }
+    }
+
+    // 파일 경로를 받아와 Bitmap 으로 변환후 ImageView 적용
+    fun setImage(imagePath: String) {
+        val imgFile = File(imagePath)
+        if (imgFile.exists()) {
+            val myBitmap = BitmapFactory.decodeFile(imgFile.absolutePath)
+            val inflater =
+                getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val statLayoutItem =
+                inflater.inflate(R.layout.addimage, null) as LinearLayout
+            val addImg: RoundedImageView = statLayoutItem.findViewById(R.id.addImage)
+            val delImg =
+                statLayoutItem.findViewById<ImageView>(R.id.delImage)
+            delImg.setOnClickListener {
+
+                if (uriList.contains(imagePath)) {
+                    uriList.remove(imagePath)
+                    count--
+                    imageLinear.removeView(statLayoutItem)
+                    imageTxtCount.text = "$count/4"
+
+                }
+                Toast.makeText(
+                    this@BoardInsertActivity,
+                    "ImageView $imagePath",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            Glide.with(applicationContext)
+                .load(myBitmap)
+                .override(300, 300)
+                .fitCenter()
+                .into(addImg)
+            imageLinear.addView(statLayoutItem)
+            imageTxtCount.text = "$count/4"
         }
     }
 

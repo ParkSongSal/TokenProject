@@ -60,6 +60,8 @@ dependencies {
 
     implementation 'org.greenrobot:eventbus:3.1.1'
 
+    // 다중 이미지 라이브러리
+    implementation 'com.opensooq.supernova:gligar:1.1.0'
 
     implementation 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
 
