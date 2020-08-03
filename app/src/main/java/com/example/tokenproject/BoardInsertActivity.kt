@@ -24,11 +24,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.tokenproject.Common.Common
-import com.example.tokenproject.Common.Common.formatTimeString
 import com.example.tokenproject.Common.FileUtils
 import com.example.tokenproject.Model.BoardReplyModel
 import com.example.tokenproject.Retrofit2.BoardApi
-import com.example.tokenproject.Retrofit2.ResultBoard_Reply
 import com.example.tokenproject.Retrofit2.RetrofitBoard
 import com.github.siyamed.shapeimageview.RoundedImageView
 import com.opensooq.supernova.gligar.GligarPicker
@@ -60,7 +58,7 @@ class BoardInsertActivity : AppCompatActivity() {
     private var mInsertBtn: Button? = null
     private var ReplyBtn:android.widget.Button? = null
 
-    private var mBoardApi: BoardApi? = null
+    private var mBoardApi: BoardApi = RetrofitBoard().imageApi
 
     private var dateTxt: TextView? = null
     private  var userTxt:TextView? = null
@@ -78,6 +76,7 @@ class BoardInsertActivity : AppCompatActivity() {
 
     private val replyList: MutableList<BoardReplyModel>? = null
     private var uriList : MutableList<String> = mutableListOf()
+    private var uriList2 : MutableList<Uri> = mutableListOf()
     private var pathsList = emptyArray<String>()
     private var mAdapter: BoardReplyAdapter? = null
     private var dialog: AlertDialog? = null
@@ -93,7 +92,7 @@ class BoardInsertActivity : AppCompatActivity() {
 
     private var mIntent : Intent? = null
 
-
+    var call: Call<ResponseBody>? = null
     var count = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -227,7 +226,6 @@ class BoardInsertActivity : AppCompatActivity() {
         }
 
 
-        mBoardApi = RetrofitBoard().imageApi
 
 
 
@@ -292,7 +290,7 @@ class BoardInsertActivity : AppCompatActivity() {
             dialog?.show()
             false
         } else {
-            uploadImage(path)
+            uploadImage(uriList2)
             true
         }
     }
@@ -341,7 +339,7 @@ class BoardInsertActivity : AppCompatActivity() {
     }*/
 
     //Insert
-    private fun uploadImage(filePath: Uri?) {
+    private fun uploadImage(filePath: MutableList<Uri>?) {
 
         //String Image = imageToString();
         val USER = userTxt!!.text.toString()
@@ -355,23 +353,108 @@ class BoardInsertActivity : AppCompatActivity() {
         val datePart = RequestBody.create(MultipartBody.FORM, DATE)
         val tokenPart = RequestBody.create(MultipartBody.FORM, TOKEN)
 
-        val call: Call<ResponseBody>
-        call = if (filePath != null) {
-            val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath)
 
+        Log.d("TAG","filePath Size : " + filePath?.size)
+
+        if(filePath?.size == 0){
+            call = mBoardApi.InsertBoard_NoImage(userPart, titlePart, contentPart, datePart, tokenPart)
+        }else if(filePath?.size == 1){
+            val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
             val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+            val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
 
-            val file = MultipartBody.Part.createFormData("image", originalFile.name, imagePart)
+            call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, null, null, null, tokenPart)
+        }else if(filePath?.size == 2){
 
-            mBoardApi!!.InsertBoard(userPart, titlePart, contentPart, datePart, file, tokenPart)
-        } else {
-            mBoardApi!!.InsertBoard_NoImage(userPart, titlePart, contentPart, datePart, tokenPart)
+            val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
+            val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+            val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
+
+            val originalFile2: File = FileUtils.getFile(this@BoardInsertActivity, filePath[1])
+            val imagePart2 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile2)
+            val file2 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart2)
+
+            call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, null, null, tokenPart)
+        }else if(filePath?.size == 3){
+            val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
+            val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+            val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
+
+            val originalFile2: File = FileUtils.getFile(this@BoardInsertActivity, filePath[1])
+            val imagePart2 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile2)
+            val file2 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart2)
+
+            val originalFile3: File = FileUtils.getFile(this@BoardInsertActivity, filePath[2])
+            val imagePart3 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile3)
+            val file3 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart3)
+
+            call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, file3, null, tokenPart)
+        }else if(filePath?.size == 4){
+            val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
+            val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+            val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
+
+            val originalFile2: File = FileUtils.getFile(this@BoardInsertActivity, filePath[1])
+            val imagePart2 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile2)
+            val file2 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart2)
+
+            val originalFile3: File = FileUtils.getFile(this@BoardInsertActivity, filePath[2])
+            val imagePart3 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile3)
+            val file3 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart3)
+
+            val originalFile4: File = FileUtils.getFile(this@BoardInsertActivity, filePath[3])
+            val imagePart4 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile4)
+            val file4 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart4)
+
+            call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, file3, file4, tokenPart)
         }
 
 
+        /*call = if (filePath?.size!! > 0) {
+
+            Log.d("TAG","filePath Size : " + filePath.size)
+            val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
+            val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+            val file = MultipartBody.Part.createFormData("image0", originalFile.name, imagePart)
+
+            val filePath1 : Uri?
+
+            val originalFile2: File = FileUtils.getFile(this@BoardInsertActivity, filePath[1])
+            val imagePart2 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile2)
+            val file2 = MultipartBody.Part.createFormData("image1", originalFile.name, imagePart2)
+
+            val originalFile3: File = FileUtils.getFile(this@BoardInsertActivity, filePath[2])
+            val imagePart3 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile3)
+            val file3 = MultipartBody.Part.createFormData("image2", originalFile.name, imagePart3)
+
+            val originalFile4: File = FileUtils.getFile(this@BoardInsertActivity, filePath[3])
+            val imagePart4 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile4)
+            val file4 = MultipartBody.Part.createFormData("image3", originalFile.name, imagePart4)
+
+
+            mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, file3, file4, tokenPart)
+            //mBoardApi.InsertBoard(userPart, titlePart, contentPart, datePart, file, tokenPart)
+        } else {
+            mBoardApi.InsertBoard_NoImage(userPart, titlePart, contentPart, datePart, tokenPart)
+        }*/
+/*
+        if (filePath != null) {
+                call = run {
+                    val originalFile: File = FileUtils.getFile(this@BoardInsertActivity,
+                        imagePath
+                    )
+                    val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+                    val file = MultipartBody.Part.createFormData("image", originalFile.name, imagePart)
+                    mBoardApi.InsertBoard(userPart, titlePart, contentPart, datePart, file, tokenPart)
+                }
+        } else {
+            call = run{mBoardApi.InsertBoard_NoImage(userPart, titlePart, contentPart, datePart, tokenPart)}
+        }
+
+*/
 
         // Call<ResponseBody> call = apiInterface.uploadImage(titlePart,file);
-        call.enqueue(object : Callback<ResponseBody?> {
+        call?.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(
                 call: Call<ResponseBody?>,
                 response: Response<ResponseBody?>
@@ -465,6 +548,7 @@ class BoardInsertActivity : AppCompatActivity() {
         if (requestCode == IMG_REQUEST && resultCode == RESULT_OK && data != null) {
             path = data.data
             testPath = data.dataString
+            Log.d("TAG"," test : $path" )
             Log.d("TAG"," test : $testPath" )
 
 
@@ -482,11 +566,17 @@ class BoardInsertActivity : AppCompatActivity() {
             Log.d("TAG","uriList : $pathsList")
 
             for (i in pathsList.indices) {
+                val uri : Uri = Uri.parse(pathsList[i])
                 uriList.add(pathsList[i])
-                Log.d("TAG","uriList : $uriList")
-                //imagePathMap.put(i, pathsList[i]);
+                uriList2.add(Uri.fromFile(File(pathsList[i])))
+                Log.d("TAG", "uriList2 : $uriList2")
                 count++
                 setImage(pathsList[i])
+                //uriList2.add(Uri.parse(String.format("content:/%s",pathsList[i])))
+
+                //imagePathMap.put(i, pathsList[i]);
+
+
             }
 
         }

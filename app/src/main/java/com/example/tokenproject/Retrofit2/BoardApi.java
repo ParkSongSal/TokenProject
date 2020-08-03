@@ -15,7 +15,6 @@ public interface BoardApi {
     String BaseUrl = "http://tkdanr2427.cafe24.com/Study/";
 
 
-
     //Board List Select
     //@FormUrlEncoded
     // 게시판 리스트 조회
@@ -32,6 +31,18 @@ public interface BoardApi {
                                    @Part MultipartBody.Part image,
                                    @Part("TOKEN") RequestBody token);
 
+    // 게시판 Insert (이미지 o)
+    @Multipart
+    @POST("BoardInsert.php")
+    Call<ResponseBody> TestInsertBoard(@Part("USER") RequestBody user,
+                                       @Part("TITLE") RequestBody title,
+                                       @Part("CONTENT") RequestBody content,
+                                       @Part("DATE") RequestBody date,
+                                       @Part MultipartBody.Part image,
+                                       @Part MultipartBody.Part image2,
+                                       @Part MultipartBody.Part image3,
+                                       @Part MultipartBody.Part image4,
+                                       @Part("TOKEN") RequestBody token);
 
 
     // 게시판 Insert (이미지 x)
@@ -63,7 +74,6 @@ public interface BoardApi {
                                            @Part("DATE") RequestBody date);
 
 
-
     // 게시판 댓글 Insert (이미지 x)
     @Multipart
     @POST("BoardReplyInsert.php")
@@ -77,8 +87,6 @@ public interface BoardApi {
     @Multipart
     @POST("BoardReplyList.php")
     Call<List<ResultBoard_Reply>> getBoardReplyList(@Part("BoardSeq") RequestBody board_seq);
-
-
 
 
 }
