@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BoardInsertActivity">
+    tools:context=".BoardDetailViewActivity">
 
 
     <LinearLayout
@@ -131,7 +131,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="5dp"
                     android:background="@drawable/main_border"
                     android:gravity="center">
 
@@ -151,6 +151,8 @@
                         android:text="4/4" />
 
                 </RelativeLayout>
+
+
 
             </LinearLayout>
 

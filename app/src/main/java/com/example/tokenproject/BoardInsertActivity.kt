@@ -54,7 +54,6 @@ class BoardInsertActivity : AppCompatActivity() {
     private var testPath : String? = null
     private var path: Uri? = null
     private var mImg: RoundedImageView? = null
-    private var mInsert_img: TextView? = null
     private var mInsertBtn: Button? = null
     private var ReplyBtn:android.widget.Button? = null
 
@@ -123,7 +122,6 @@ class BoardInsertActivity : AppCompatActivity() {
         //mAdapter = Board_ReplyAdapter(applicationContext, replyList)
         //mReply_List!!.adapter = mAdapter
 
-        mInsert_img!!.setOnClickListener { selectImage() }
 
         cameraIcon.setOnClickListener{
             if (pathsList != null) {
@@ -184,12 +182,10 @@ class BoardInsertActivity : AppCompatActivity() {
                 if (id == writer) {          // 로그인계정과 작성자가 같으면
                     titleTxt!!.isEnabled = true // 제목, 내용 ReadOnly false
                     contentTxt!!.isEnabled = true
-                    mInsert_img!!.visibility = View.VISIBLE //이미지추가 버튼 보이게
                     mInsertBtn!!.visibility = View.VISIBLE // 글쓰기 버튼 보이게
                 } else {
                     titleTxt!!.isEnabled = false // 제목, 내용 ReadOnly true
                     contentTxt!!.isEnabled = false
-                    mInsert_img!!.visibility = View.GONE //이미지추가 버튼 안보이게
                     mInsertBtn!!.visibility = View.GONE // 글쓰기 버튼 안보이게
                 }
                 titleTxt!!.setText(intent.getStringExtra("TITLE")) //제목
@@ -254,9 +250,6 @@ class BoardInsertActivity : AppCompatActivity() {
 
 
         mInsertBtn = findViewById(R.id.insertBtn) //글쓰기버튼
-
-        mInsert_img = findViewById(R.id.insert_img) //이미지추가 버튼
-
 
         mReply_OnOff = findViewById(R.id.reply_OnOff) //댓글 On/Off
 

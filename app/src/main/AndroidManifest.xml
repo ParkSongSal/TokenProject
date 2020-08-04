@@ -3,12 +3,10 @@
     package="com.example.tokenproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 필수권한 -->
-    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  위치 -->
+    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  위치 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 저장공간 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -19,7 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".BoardInsertActivity"/>
+        <activity android:name=".BoardDetailViewActivity"></activity>
+        <activity android:name=".BoardInsertActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity">

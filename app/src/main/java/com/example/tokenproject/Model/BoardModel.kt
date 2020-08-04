@@ -8,5 +8,8 @@ data class BoardModel(
     var content: String,
     var date: String,
     var path: String?,
+    var path2 : String?,
+    var path3 : String?,
+    var path4 : String?,
     var reply_count: String
 )

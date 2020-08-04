@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.tokenproject.Adapter.BoardAdapter
+import com.example.tokenproject.BoardDetailViewActivity
 import com.example.tokenproject.BoardInsertActivity
 import com.example.tokenproject.Model.BoardModel
 import com.example.tokenproject.R
@@ -155,15 +156,17 @@ class FirstFragment : Fragment() {
                     val CONTENT: String = result[i].content
                     val DATE: String = result[i].date
                     val PATH: String? = result[i].path
+                    val PATH2 : String? = result[i].path2
+                    val PATH3 : String? = result[i].path3
+                    val PATH4 : String? = result[i].path4
                     val reply_count: String = result[i].reply_count
                     val getServerdata =
-                        BoardModel(SEQ, USER, TITLE, CONTENT, DATE, PATH, reply_count)
+                        BoardModel(SEQ, USER, TITLE, CONTENT, DATE, PATH, PATH2, PATH3, PATH4, reply_count)
                     boardList.add(getServerdata)
                     saveList.add(getServerdata)
                     mAdapter = BoardAdapter(activity!!, boardList, saveList)
                     mRecycle_view!!.adapter = mAdapter
                     runAnimation()
-
                 }
                 editor?.putInt("fragInsert",-1)
                 editor?.apply()
@@ -213,14 +216,27 @@ class FirstFragment : Fragment() {
     @Subscribe
     fun onItemClick(event: BoardAdapter.ItemClickEvent) {
 
-        mIntent = Intent(activity?.applicationContext, BoardInsertActivity::class.java)
+        mIntent = Intent(activity?.applicationContext, BoardDetailViewActivity::class.java)
 
         mIntent!!.putExtra("Seq", boardList[event.position].seq)
         mIntent!!.putExtra("TITLE", boardList[event.position].title)
         mIntent!!.putExtra("WRITER", boardList[event.position].user_id)
         mIntent!!.putExtra("CONTENT", boardList[event.position].content)
         mIntent!!.putExtra("DATE", boardList[event.position].date)
+
+        var list =  ArrayList<String>()
+
+        list.add(boardList[event.position].path.toString())
+        list.add(boardList[event.position].path2.toString())
+        list.add(boardList[event.position].path3.toString())
+        list.add(boardList[event.position].path4.toString())
+
+        mIntent!!.putExtra("pathList",list)
+
         mIntent!!.putExtra("PATH", boardList[event.position].path)
+        mIntent!!.putExtra("PATH2", boardList[event.position].path2)
+        mIntent!!.putExtra("PATH3", boardList[event.position].path3)
+        mIntent!!.putExtra("PATH4", boardList[event.position].path4)
         mIntent!!.putExtra("ReplyCount", boardList[event.position].reply_count)
         startActivity(mIntent)
 

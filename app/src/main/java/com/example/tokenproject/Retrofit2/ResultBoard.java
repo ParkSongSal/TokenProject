@@ -8,6 +8,9 @@ public class ResultBoard {
     String content;
     String date;
     String path;
+    String path2;
+    String path3;
+    String path4;
     String Lasted_Date;
     String Nick_Name;
     String Student_Id;
@@ -69,6 +72,30 @@ public class ResultBoard {
         this.path = path;
     }
 
+    public String getPath2() {
+        return path2;
+    }
+
+    public void setPath2(String path2) {
+        this.path2 = path2;
+    }
+
+    public String getPath3() {
+        return path3;
+    }
+
+    public void setPath3(String path3) {
+        this.path3 = path3;
+    }
+
+    public String getPath4() {
+        return path4;
+    }
+
+    public void setPath4(String path4) {
+        this.path4 = path4;
+    }
+
     public String getLasted_Date() {
         return Lasted_Date;
     }
@@ -111,6 +138,9 @@ public class ResultBoard {
                 ", content='" + content + '\'' +
                 ", date='" + date + '\'' +
                 ", path='" + path + '\'' +
+                ", path2='" + path2 + '\'' +
+                ", path3='" + path3 + '\'' +
+                ", path4='" + path4 + '\'' +
                 ", Lasted_Date='" + Lasted_Date + '\'' +
                 ", Nick_Name='" + Nick_Name + '\'' +
                 ", Student_Id='" + Student_Id + '\'' +
