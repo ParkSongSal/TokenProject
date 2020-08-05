@@ -43,6 +43,7 @@ class BoardDetailViewActivity : AppCompatActivity() {
 
     private var id = ""
     private var token = ""
+    private var count = 0
     var pathList = ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +83,6 @@ class BoardDetailViewActivity : AppCompatActivity() {
 
         pathList = intent.getSerializableExtra("pathList") as ArrayList<String>
 
-        Log.d("TAG", "pathList : $pathList")
-        Log.d("TAG", "pathList : " + pathList.size)
-
         for (j in pathList.indices){
             if("null" == pathList[j] || "" == pathList[j]){
                 pathList[j] = "android.resource://$packageName/drawable/deleteiconblack2"
@@ -101,13 +99,14 @@ class BoardDetailViewActivity : AppCompatActivity() {
                 if(pathList[i].contains("deleteiconblack2")) {
                     continue
                 }else{
+                    count++
                     setImage(pathList[i], i)
                 }
             }else{
                 continue
             }
-
         }
+        imageTxtCount.text = "$count/4"
     }
 
     /*
