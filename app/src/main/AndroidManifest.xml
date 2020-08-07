@@ -17,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".BoardDetailViewActivity"></activity>
+        <activity android:name=".BoardUpdateActivity"></activity>
+        <activity
+            android:name=".BoardDetailViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".BoardInsertActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".MainActivity" />

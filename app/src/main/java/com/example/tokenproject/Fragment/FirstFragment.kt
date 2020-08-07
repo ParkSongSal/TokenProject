@@ -219,6 +219,7 @@ class FirstFragment : Fragment() {
         mIntent = Intent(activity?.applicationContext, BoardDetailViewActivity::class.java)
 
         mIntent!!.putExtra("Seq", boardList[event.position].seq)
+
         mIntent!!.putExtra("TITLE", boardList[event.position].title)
         mIntent!!.putExtra("WRITER", boardList[event.position].user_id)
         mIntent!!.putExtra("CONTENT", boardList[event.position].content)

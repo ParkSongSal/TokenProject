@@ -1,40 +1,20 @@
 package com.example.tokenproject
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.Menu
+import android.view.MenuItem
 import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.view.marginTop
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.github.siyamed.shapeimageview.RoundedImageView
+import androidx.appcompat.app.AppCompatActivity
+import com.denzcoskun.imageslider.interfaces.ItemClickListener
+import com.denzcoskun.imageslider.models.SlideModel
 import com.github.tntkhang.fullscreenimageview.library.FullScreenImageViewActivity
-import com.stone.vega.library.VegaLayoutManager
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_board_detail_view.*
-import kotlinx.android.synthetic.main.activity_board_detail_view.contentTxt
-import kotlinx.android.synthetic.main.activity_board_detail_view.dateTxt
-import kotlinx.android.synthetic.main.activity_board_detail_view.imageLinear
-import kotlinx.android.synthetic.main.activity_board_detail_view.imageTxtCount
-import kotlinx.android.synthetic.main.activity_board_detail_view.insertBtn
-import kotlinx.android.synthetic.main.activity_board_detail_view.reply_list
-import kotlinx.android.synthetic.main.activity_board_detail_view.titleTxt
-import kotlinx.android.synthetic.main.activity_board_detail_view.userTxt
-import kotlinx.android.synthetic.main.activity_board_detail_view.view.*
-import kotlinx.android.synthetic.main.activity_board_insert.*
-import java.io.File
 
 class BoardDetailViewActivity : AppCompatActivity() {
 
@@ -44,7 +24,18 @@ class BoardDetailViewActivity : AppCompatActivity() {
     private var id = ""
     private var token = ""
     private var count = 0
+    private var date : String? = null
+    var seq : Int = 0
+    var title : String? = null
+    var writer : String? = null
+    var content : String? = null
+    var replyCount : String? = null
+
+    private var menuGb = 0
     var pathList = ArrayList<String>()
+
+    private var slideModels : ArrayList<SlideModel> = ArrayList<SlideModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board_detail_view)
@@ -57,31 +48,18 @@ class BoardDetailViewActivity : AppCompatActivity() {
         id = setting?.getString("ID", "").toString() //로그인계정
         token = setting?.getString("token", "").toString()    //작성자 토큰
 
-        val manager = LinearLayoutManager(this)
-        val decoration = DividerItemDecoration(this, manager.orientation)
+        seq = intent.getIntExtra("Seq",0)
 
-        reply_list.addItemDecoration(decoration)
-        reply_list.layoutManager = VegaLayoutManager()
-
-        val writer = intent.getStringExtra("WRITER") //작성자
-
-        if (id == writer) {   //작성자와 로그인계정이 같으면
-            titleTxt.isEnabled = true // 제목, 내용 ReadOnly true
-            contentTxt.isEnabled = true
-            insertBtn.visibility = View.VISIBLE // 글쓰기 버튼 보이게
-        } else {
-            titleTxt.isEnabled = false // 제목, 내용 ReadOnly true
-            contentTxt.isEnabled = false
-            insertBtn.visibility = View.GONE // 글쓰기 버튼 안보이게
-        }
-
-        titleTxt.setText(intent.getStringExtra("TITLE"))    //제목
-        contentTxt.setText(intent.getStringExtra("CONTENT"))//내용
-        userTxt.text = intent.getStringExtra("WRITER")    //작성자
-        dateTxt.text = intent.getStringExtra("DATE").substring(0, 16)//날짜
-
-
+        title = intent.getStringExtra("TITLE")    //제목
+        writer = intent.getStringExtra("WRITER") //작성자
+        content = intent.getStringExtra("CONTENT")  //내용
+        date = intent.getStringExtra("DATE")    //작성일자
+        replyCount = intent.getStringExtra("ReplyCount")    //댓글개수
         pathList = intent.getSerializableExtra("pathList") as ArrayList<String>
+
+        writerTxt.text = "작성자 : $writer"
+        dateTxt.text = "작성일자 : $date"
+        contents_edit.text = content
 
         for (j in pathList.indices){
             if("null" == pathList[j] || "" == pathList[j]){
@@ -90,63 +68,108 @@ class BoardDetailViewActivity : AppCompatActivity() {
                 continue
             }
         }
-        Log.d("TAG", "pathList : $pathList")
 
         for (i in pathList.indices) {
-            //Log.d("TAG","pathList : " + pathList[i].length)
-            //Log.d("TAG","pathList : " + pathList[i].length)
             if(pathList[i].isNotEmpty()){
                 if(pathList[i].contains("deleteiconblack2")) {
                     continue
                 }else{
                     count++
-                    setImage(pathList[i], i)
+                    slideModels.add(SlideModel(pathList[i],title))
+                    //setImage(pathList[i], i)
                 }
             }else{
                 continue
             }
         }
-        imageTxtCount.text = "$count/4"
+
+        img_slider.setImageList(slideModels, true)
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = ""
+
+        app_bar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+            override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                when {
+                    verticalOffset == 0 -> { //  이미지가 보일때
+                        supportActionBar?.title = ""
+                        toolbar_layout.title = ""
+                    }
+                    Math.abs(verticalOffset) >= app_bar.totalScrollRange -> { // 이미지 안보이고 툴바만 보일떄
+                        supportActionBar?.title = title
+
+                    }
+                    Math.abs(verticalOffset) <= app_bar.totalScrollRange -> {// 중간
+                        toolbar_layout.title = ""
+                        supportActionBar?.subtitle=""
+                    }
+                    else -> {
+                        supportActionBar?.title = ""
+                        toolbar_layout.title = ""
+                    }
+                }
+            }
+        })
     }
 
-    /*
-    *
-    * */
-    @SuppressLint("InflateParams")
-    fun setImage(imagePath: String?, pos: Int) {
-        Log.d("TAG","position : $pos")
-        Log.d("TAG","imagePath : $imagePath")
-        if ("null" == imagePath){
-            return
-        } else {
-            val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    //메뉴를 붙이는 부분
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
-            val statLayoutItem =
-                inflater.inflate(R.layout.adddetailimage, imageLinear, false) as LinearLayout
-
-            statLayoutItem.x = 18F
-            statLayoutItem.y = 22F
-
-            val addImg: RoundedImageView = statLayoutItem.findViewById(R.id.addImage)
-
-
-            addImg.setOnClickListener {
-                Toast.makeText(this, "이미지가 보이지 않을 시 화면 가운데를 두손가락으로 터치 해주세요.", Toast.LENGTH_LONG)
-                    .show()
-                onImageClickAction(pathList, pos)
-            }
-
-
-            Glide.with(applicationContext)
-                .load(imagePath)
-                .override(300, 300)
-                .fitCenter()
-                .into(addImg)
-
-            imageLinear.addView(statLayoutItem)
+        if(id == writer){   // 작성자와 로그인 계정이 같으면 수정, 삭제 메뉴 추가
+            val inflater = menuInflater
+            inflater.inflate(R.menu.menu_board, menu)
+        }else{
+            return false
         }
 
+        return true
     }
+
+    //메뉴클릭시!
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_setting -> {
+                updateBoard()   // 수정화면으로
+                true
+            }
+            R.id.action_menu2 -> {
+                Toast.makeText(this,"삭제",Toast.LENGTH_SHORT).show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun updateBoard(){
+        intent = Intent(this, BoardUpdateActivity::class.java)
+        intent.putExtra("Seq",seq)
+        intent.putExtra("TITLE",title)
+        intent.putExtra("WRITER",writer)
+        intent.putExtra("CONTENT",content)
+        intent.putExtra("DATE",date)
+
+        var list = java.util.ArrayList<String>()
+
+        for (i in pathList.indices) {
+            if(pathList[i].isNotEmpty()){
+                if(pathList[i].contains("deleteiconblack2")) {
+                    continue
+                }else{
+                    list.add(pathList[i])
+                    //setImage(pathList[i], i)
+                }
+            }else{
+                continue
+            }
+        }
+        intent.putExtra("pathList",list)
+        intent.putExtra("ReplyCount", replyCount)
+        startActivity(intent)
+        Toast.makeText(this, "수정", Toast.LENGTH_SHORT).show()
+    }
+
+
+
 
     private fun onImageClickAction(uriString: ArrayList<String>, pos: Int) {
         val fullImageIntent = Intent(this, FullScreenImageViewActivity::class.java)
@@ -157,6 +180,8 @@ class BoardDetailViewActivity : AppCompatActivity() {
 
 
 }
+
+
 
 
 

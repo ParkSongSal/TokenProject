@@ -71,7 +71,8 @@ public interface BoardApi {
                                            @Part("USER") RequestBody user,
                                            @Part("TITLE") RequestBody title,
                                            @Part("CONTENT") RequestBody content,
-                                           @Part("DATE") RequestBody date);
+                                           @Part("DATE") RequestBody date,
+                                           @Part("TOKEN") RequestBody token);
 
 
     // 게시판 댓글 Insert (이미지 x)

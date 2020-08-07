@@ -1,238 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".BoardDetailViewActivity">
 
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimaryDark"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:toolbarId="@+id/toolbar">
+
+            <com.denzcoskun.imageslider.ImageSlider
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:id="@+id/img_slider"
+                app:auto_cycle="true"
+                app:delay="0"
+                app:period="3000"
+                app:placeholder="@drawable/ic_baseline_camera_alt_24"
+                app:error_image="@drawable/ic_baseline_settings_24"
+                app:layout_collapseMode="parallax"
+                app:corner_radius="5"/>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+    <!--내용시작-->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <HorizontalScrollView
-            android:id="@+id/scroll_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true">
-
-            <EditText
-                android:id="@+id/titleTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:background="@drawable/border_edit"
-                android:gravity="start"
-                android:hint="제목을 입력하세요"
-                android:inputType="text"
-                android:maxLength="30"
-                android:maxLines="2"
-                android:padding="10dp"
-                android:textSize="20sp" />
-        </HorizontalScrollView>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/subtitle_ll"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            >
 
-            <RelativeLayout
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp">
+                android:layout_height="50dp"
+                android:background="@drawable/border_edit"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                >
 
                 <TextView
-                    android:id="@+id/userTxt"
+                    android:id="@+id/writerTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/dateTxt"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="150dp"
-                    android:hint="관리자"
-                    android:textSize="17sp" />
+                    android:layout_gravity="center_vertical"
+                    android:gravity="start"
+                    android:text="작성자 :"
+                    android:textColor="#636161"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/border_edit"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:padding="5dp"
+                >
 
                 <TextView
                     android:id="@+id/dateTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:text="2018-06-18 15:30"
-                    android:textColor="@color/colorPointOrange"
-                    android:textSize="14sp" />
-
-            </RelativeLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/border_edit"
-            android:orientation="vertical">
-
-            <com.github.siyamed.shapeimageview.RoundedImageView
-                android:id="@+id/imageView"
-                android:layout_width="300dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:visibility="gone"
-                app:siRadius="6dp" />
-
-            <!--   <ImageView
-                   android:id="@+id/imageView"
-                   android:layout_width="300dp"
-                   android:layout_height="200dp"
-                   android:layout_centerHorizontal="true"
-                   android:layout_gravity="center"
-                   android:layout_marginTop="15dp"
-                   android:scaleType="fitXY"
-                   android:adjustViewBounds="true"
-                   android:visibility="gone" />
-
-   -->
-            <ScrollView
-                android:id="@+id/scroll_content"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:fillViewport="true">
-
-                <EditText
-                    android:id="@+id/contentTxt"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_margin="5dp"
-                    android:gravity="top"
-                    android:hint="내용을 입력하세요"
-                    android:padding="15dp" />
-            </ScrollView>
-
-            <LinearLayout
-                android:id="@+id/imageLinear"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:paddingStart="15dp"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/main_border"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/cameraIcon"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_baseline_camera_alt_24" />
-
-                    <TextView
-                        android:id="@+id/imageTxtCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/cameraIcon"
-                        android:layout_centerHorizontal="true"
-                        android:text="4/4" />
-
-                </RelativeLayout>
-
-
-
-            </LinearLayout>
-
-
-            <Button
-                android:id="@+id/insertBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/ripple_registerbtn"
-                android:gravity="center"
-                android:text="등록"
-                android:textColor="#ffffff"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-
-            <LinearLayout
-                android:id="@+id/reply_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/ReplyTxt"
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/border_edit"
-                    android:hint="댓글을 입력하시오."
-                    android:inputType="text"
-                    android:paddingStart="8dp" />
-
-                <Button
-                    android:id="@+id/ReplyBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="5dp"
-                    android:background="@drawable/ripple_registerbtn"
-                    android:text="등록"
-                    android:textColor="#fff"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="center_vertical"
+                    android:gravity="start"
+                    android:text="작성일자 :"
+                    android:textColor="#636161"
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
 
             <TextView
-                android:id="@+id/reply_OnOff"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="댓글 보기"
-                android:textStyle="bold" />
-
-            <ScrollView
-                android:id="@+id/scroll_view"
+                android:id="@+id/contents_edit"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:fillViewport="true"
-                android:visibility="gone">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/reply_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:padding="10dp"
-                    android:visibility="gone"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    app:spanCount="1" />
-
-            </ScrollView>
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:textColor="#636161"
+                android:textSize="16sp"/>
 
         </LinearLayout>
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

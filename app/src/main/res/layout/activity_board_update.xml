@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BoardInsertActivity">
+    tools:context=".BoardUpdateActivity">
 
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:fillViewport="true">
 
             <EditText
-                android:id="@+id/titleTxt"
+                android:id="@+id/update_titleTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -34,6 +34,42 @@
                 android:textSize="20sp" />
         </HorizontalScrollView>
 
+        <LinearLayout
+            android:id="@+id/update_subtitle_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp">
+
+                <TextView
+                    android:id="@+id/update_userTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/dateTxt"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="150dp"
+                    android:hint="관리자"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/update_dateTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:text="2018-06-18 15:30"
+                    android:textColor="@color/colorPointOrange"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,38 +79,15 @@
             android:background="@drawable/border_edit"
             android:orientation="vertical">
 
-            <com.github.siyamed.shapeimageview.RoundedImageView
-                android:id="@+id/imageView"
-                android:layout_width="300dp"
-                android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:visibility="gone"
-                app:siRadius="6dp" />
-
-            <!--   <ImageView
-                   android:id="@+id/imageView"
-                   android:layout_width="300dp"
-                   android:layout_height="200dp"
-                   android:layout_centerHorizontal="true"
-                   android:layout_gravity="center"
-                   android:layout_marginTop="15dp"
-                   android:scaleType="fitXY"
-                   android:adjustViewBounds="true"
-                   android:visibility="gone" />
-
-   -->
             <ScrollView
-                android:id="@+id/scroll_content"
+                android:id="@+id/update_scroll_content"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:fillViewport="true">
 
                 <EditText
-                    android:id="@+id/contentTxt"
+                    android:id="@+id/update_contentTxt"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_margin="5dp"
@@ -84,7 +97,7 @@
             </ScrollView>
 
             <LinearLayout
-                android:id="@+id/imageLinear"
+                android:id="@+id/update_imageLinear"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="10dp"
@@ -100,17 +113,17 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:id="@+id/cameraIcon"
+                        android:id="@+id/update_cameraIcon"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerHorizontal="true"
                         android:src="@drawable/ic_baseline_camera_alt_24" />
 
                     <TextView
-                        android:id="@+id/imageTxtCount"
+                        android:id="@+id/update_imageTxtCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/cameraIcon"
+                        android:layout_below="@+id/update_cameraIcon"
                         android:layout_centerHorizontal="true"
                         android:text="4/4" />
 
@@ -120,14 +133,14 @@
 
 
             <Button
-                android:id="@+id/insertBtn"
+                android:id="@+id/updateBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:background="@drawable/ripple_registerbtn"
                 android:gravity="center"
-                android:text="등록"
+                android:text="수정"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
                 android:textStyle="bold" />
