@@ -30,7 +30,7 @@
                 app:auto_cycle="true"
                 app:delay="0"
                 app:period="3000"
-                app:placeholder="@drawable/ic_baseline_camera_alt_24"
+                app:placeholder="@drawable/ic_image_black_24dp"
                 app:error_image="@drawable/ic_baseline_settings_24"
                 app:layout_collapseMode="parallax"
                 app:corner_radius="5"/>

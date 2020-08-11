@@ -1,13 +1,15 @@
 package com.example.tokenproject
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.ImageView
@@ -15,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.tokenproject.Common.Common
 import com.example.tokenproject.Common.FileUtils
@@ -22,7 +25,6 @@ import com.example.tokenproject.Retrofit2.BoardApi
 import com.example.tokenproject.Retrofit2.RetrofitBoard
 import com.github.siyamed.shapeimageview.RoundedImageView
 import com.opensooq.supernova.gligar.GligarPicker
-import kotlinx.android.synthetic.main.activity_board_insert.*
 import kotlinx.android.synthetic.main.activity_board_update.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -61,12 +63,17 @@ class BoardUpdateActivity : AppCompatActivity() {
             : SharedPreferences? = null
     var editor: SharedPreferences.Editor? = null
 
+    var asyncDialog : ProgressDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board_update)
 
         setting = getSharedPreferences("tokenApp", Activity.MODE_PRIVATE)
         editor = setting?.edit()
+
+        asyncDialog = ProgressDialog(this@BoardUpdateActivity)
+
 
         id = setting?.getString("ID", "").toString() //로그인계정
         token = setting?.getString("token", "").toString()    //작성자 토큰
@@ -128,7 +135,17 @@ class BoardUpdateActivity : AppCompatActivity() {
 
 
         updateBtn.setOnClickListener {
-            hasContent()
+
+            asyncDialog!!.setProgressStyle(ProgressDialog.STYLE_SPINNER)
+            asyncDialog!!.setMessage("수정중 입니다...")
+
+            asyncDialog!!.show()
+
+            Handler().postDelayed(Runnable {
+                hasContent()
+                //여기에 딜레이 후 시작할 작업들을 입력
+            }, 2000) // 0.5초 정도 딜레이를 준 후 시작
+
         }
 
     }
@@ -254,6 +271,8 @@ class BoardUpdateActivity : AppCompatActivity() {
                 editor?.apply()
                 finish()
                 Toast.makeText(this@BoardUpdateActivity, "수정되었습니다.", Toast.LENGTH_LONG).show()
+                asyncDialog?.dismiss()
+
             }
 
             override fun onFailure(
@@ -266,7 +285,11 @@ class BoardUpdateActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
                 Log.d("TAG", "imageUpload Faild.." + t.message)
+                asyncDialog?.dismiss()
+
             }
+
+
         })
 
 
@@ -362,6 +385,24 @@ class BoardUpdateActivity : AppCompatActivity() {
             .into(addImg)
         update_imageLinear.addView(statLayoutItem2)
         update_imageTxtCount.text = "$count/4"
+    }
+
+    override fun onBackPressed() {
+        show()
+    }
+
+    fun show() {
+        val builder =
+            AlertDialog.Builder(this)
+        builder.setMessage("게시글 수정을 종료할까요?")
+               .setPositiveButton("확인"){dialog: DialogInterface?, which: Int ->
+                    Toast.makeText(this@BoardUpdateActivity, "뒤로가기 버튼 확인", Toast.LENGTH_SHORT).show()
+                   finish()
+                }
+               .setNegativeButton("취소"){dialog: DialogInterface?, which: Int ->
+                    Toast.makeText(this@BoardUpdateActivity, "뒤로가기 버튼 취소", Toast.LENGTH_SHORT).show()
+                }
+        .show()
     }
 
 
