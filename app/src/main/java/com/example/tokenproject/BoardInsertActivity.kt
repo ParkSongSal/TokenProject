@@ -154,13 +154,18 @@ class BoardInsertActivity : AppCompatActivity() {
                 call = mBoardApi.InsertBoard_NoImage(userPart, titlePart, contentPart, datePart, tokenPart)
             }
             1 -> {
+                val originalPath = RequestBody.create(MultipartBody.FORM, filePath[0].toString())
+
                 val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
                 val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
                 val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
 
-                call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, null, null, null, tokenPart)
+                call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, null, null, null,originalPath, null, null, null,  tokenPart)
             }
             2 -> {
+
+                val originalPath = RequestBody.create(MultipartBody.FORM, filePath[0].toString())
+                val originalPath2 = RequestBody.create(MultipartBody.FORM, filePath[1].toString())
 
                 val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
 
@@ -172,9 +177,13 @@ class BoardInsertActivity : AppCompatActivity() {
                 val imagePart2 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile2)
                 val file2 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart2)
 
-                call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, null, null, tokenPart)
+                call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, null, null,originalPath, originalPath2, null, null, tokenPart)
             }
             3 -> {
+                val originalPath = RequestBody.create(MultipartBody.FORM, filePath[0].toString())
+                val originalPath2 = RequestBody.create(MultipartBody.FORM, filePath[1].toString())
+                val originalPath3 = RequestBody.create(MultipartBody.FORM, filePath[2].toString())
+
                 val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
                 val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
                 val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
@@ -187,9 +196,15 @@ class BoardInsertActivity : AppCompatActivity() {
                 val imagePart3 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile3)
                 val file3 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart3)
 
-                call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, file3, null, tokenPart)
+                call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, file3, null, originalPath, originalPath2, originalPath3, null,  tokenPart)
             }
             4 -> {
+                val originalPath = RequestBody.create(MultipartBody.FORM, filePath[0].toString())
+                val originalPath2 = RequestBody.create(MultipartBody.FORM, filePath[1].toString())
+                val originalPath3 = RequestBody.create(MultipartBody.FORM, filePath[2].toString())
+                val originalPath4 = RequestBody.create(MultipartBody.FORM, filePath[3].toString())
+
+
                 val originalFile: File = FileUtils.getFile(this@BoardInsertActivity, filePath[0])
                 val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
                 val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
@@ -206,7 +221,7 @@ class BoardInsertActivity : AppCompatActivity() {
                 val imagePart4 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile4)
                 val file4 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart4)
 
-                call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, file3, file4, tokenPart)
+                call = mBoardApi.TestInsertBoard(userPart, titlePart, contentPart, datePart, file, file2, file3, file4, originalPath, originalPath2, originalPath3, originalPath4, tokenPart)
             }
         }
 

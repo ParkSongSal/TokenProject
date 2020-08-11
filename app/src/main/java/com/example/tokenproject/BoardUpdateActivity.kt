@@ -49,16 +49,24 @@ class BoardUpdateActivity : AppCompatActivity() {
     var count =0
     private var pathsList = emptyArray<String>()
     var pathList = ArrayList<String>()
+    var originalPathList = ArrayList<String>()
+
+    private var uriList2 : MutableList<Uri> = mutableListOf()
+
     private var dialog: AlertDialog? = null
 
     var call: Call<ResponseBody>? = null
+
+    var setting //아이디 저장 기능
+            : SharedPreferences? = null
+    var editor: SharedPreferences.Editor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board_update)
 
-        var setting: SharedPreferences? = getSharedPreferences("tokenApp", Activity.MODE_PRIVATE)
-        var editor: SharedPreferences.Editor? = setting?.edit()
+        setting = getSharedPreferences("tokenApp", Activity.MODE_PRIVATE)
+        editor = setting?.edit()
 
         id = setting?.getString("ID", "").toString() //로그인계정
         token = setting?.getString("token", "").toString()    //작성자 토큰
@@ -71,6 +79,7 @@ class BoardUpdateActivity : AppCompatActivity() {
             writer = intent.getStringExtra("WRITER")
             replyCount = intent.getStringExtra("ReplyCount")
             pathList = intent.getSerializableExtra("pathList") as ArrayList<String>
+            originalPathList = intent.getSerializableExtra("originalPathList") as ArrayList<String>
 
             update_titleTxt.setText(title)
             update_contentTxt.setText(content)
@@ -79,6 +88,7 @@ class BoardUpdateActivity : AppCompatActivity() {
 
             for(i in pathList.indices){
                 Log.d("TAG", "image $i : "+pathList[i])
+                uriList2.add(Uri.fromFile(File(originalPathList[i])))
                 count++
                 setImageUpdate(pathList[i])
             }
@@ -135,12 +145,12 @@ class BoardUpdateActivity : AppCompatActivity() {
             dialog?.show()
             false
         } else {
-            updateBoard(pathList)
+            updateBoard(uriList2)
             true
         }
     }
 
-    private fun updateBoard(filePath : ArrayList<String>){
+    private fun updateBoard(filePath : MutableList<Uri>?){
 
         val Seq = seq
         val User = id
@@ -156,8 +166,109 @@ class BoardUpdateActivity : AppCompatActivity() {
         val datePart = RequestBody.create(MultipartBody.FORM, Date)
         val tokenPart = RequestBody.create(MultipartBody.FORM, TOKEN)
 
-        Log.d("TAG","updateBoard imagePath Size : " + filePath.size)
+        Log.d("TAG","updateBoard imagePath Size : " + filePath?.size)
         Log.d("TAG", "updateBoard imagePath : $filePath")
+
+        when (filePath?.size) {
+            0 -> {
+                call = mBoardApi.UpdateBoard_NoImage(seqPart,userPart, titlePart, contentPart, datePart, tokenPart)
+            }
+            1 -> {
+                val originalPath = RequestBody.create(MultipartBody.FORM, filePath[0].toString())
+
+                val originalFile: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[0])
+                val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+                val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
+
+                call = mBoardApi.TestUpdateBoard(seqPart,userPart, titlePart, contentPart, datePart, file, null, null, null, originalPath, null, null, null)
+            }
+            2 -> {
+                val originalPath = RequestBody.create(MultipartBody.FORM, filePath[0].toString())
+                val originalPath2 = RequestBody.create(MultipartBody.FORM, filePath[1].toString())
+
+                val originalFile: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[0])
+
+
+                val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+                val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
+
+                val originalFile2: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[1])
+                val imagePart2 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile2)
+                val file2 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart2)
+
+                call = mBoardApi.TestUpdateBoard(seqPart,userPart, titlePart, contentPart, datePart, file, file2, null, null, originalPath, originalPath2, null, null)
+            }
+            3 -> {
+                val originalPath = RequestBody.create(MultipartBody.FORM, filePath[0].toString())
+                val originalPath2 = RequestBody.create(MultipartBody.FORM, filePath[1].toString())
+                val originalPath3 = RequestBody.create(MultipartBody.FORM, filePath[2].toString())
+
+                val originalFile: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[0])
+                val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+                val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
+
+                val originalFile2: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[1])
+                val imagePart2 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile2)
+                val file2 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart2)
+
+                val originalFile3: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[2])
+                val imagePart3 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile3)
+                val file3 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart3)
+
+                call = mBoardApi.TestUpdateBoard(seqPart,userPart, titlePart, contentPart, datePart, file, file2, file3, null, originalPath, originalPath2, originalPath3, null)
+            }
+            4 -> {
+
+                val originalPath = RequestBody.create(MultipartBody.FORM, filePath[0].toString())
+                val originalPath2 = RequestBody.create(MultipartBody.FORM, filePath[1].toString())
+                val originalPath3 = RequestBody.create(MultipartBody.FORM, filePath[2].toString())
+                val originalPath4 = RequestBody.create(MultipartBody.FORM, filePath[3].toString())
+
+                val originalFile: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[0])
+                val imagePart = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile)
+                val file = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart)
+
+                val originalFile2: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[1])
+                val imagePart2 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile2)
+                val file2 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart2)
+
+                val originalFile3: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[2])
+                val imagePart3 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile3)
+                val file3 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart3)
+
+                val originalFile4: File = FileUtils.getFile(this@BoardUpdateActivity, filePath[3])
+                val imagePart4 = RequestBody.create(MediaType.parse("multipart/form-data"),originalFile4)
+                val file4 = MultipartBody.Part.createFormData("image[]", originalFile.name, imagePart4)
+
+                call = mBoardApi.TestUpdateBoard(seqPart,userPart, titlePart, contentPart, datePart, file, file2, file3, file4, originalPath, originalPath2, originalPath3, originalPath4)
+            }
+        }
+
+
+        call?.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(
+                call: Call<ResponseBody?>,
+                response: Response<ResponseBody?>
+            ) {
+                editor?.putInt("fragInsert",0)
+                editor?.apply()
+                finish()
+                Toast.makeText(this@BoardUpdateActivity, "수정되었습니다.", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onFailure(
+                call: Call<ResponseBody?>,
+                t: Throwable
+            ) {
+                Toast.makeText(
+                    this@BoardUpdateActivity,
+                    "데이터 접속 상태를 확인 후 다시 시도해주세요.",
+                    Toast.LENGTH_LONG
+                ).show()
+                Log.d("TAG", "imageUpload Faild.." + t.message)
+            }
+        })
+
 
     }
 
@@ -174,6 +285,7 @@ class BoardUpdateActivity : AppCompatActivity() {
             for (i in pathsList.indices) {
                 val uri : Uri = Uri.parse(pathsList[i])
                 pathList.add(pathsList[i])
+                uriList2.add(Uri.fromFile(File(pathsList[i])))
                 count++
                 setImage(pathsList[i])
             }
@@ -197,6 +309,7 @@ class BoardUpdateActivity : AppCompatActivity() {
 
                 if (pathList.contains(imagePath)) {
                     pathList.remove(imagePath)
+                    uriList2.remove(Uri.fromFile(File(imagePath)))
                     count--
                     update_imageLinear.removeView(statLayoutItem)
                     update_imageTxtCount.text = "$count/4"
@@ -230,6 +343,7 @@ class BoardUpdateActivity : AppCompatActivity() {
 
             if (pathList.contains(imagePath)) {
                 pathList.remove(imagePath)
+                uriList2.remove(Uri.fromFile(File(imagePath)))
                 count--
                 update_imageLinear.removeView(statLayoutItem2)
                 update_imageTxtCount.text = "$count/4"

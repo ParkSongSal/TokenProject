@@ -33,6 +33,7 @@ class BoardDetailViewActivity : AppCompatActivity() {
 
     private var menuGb = 0
     var pathList = ArrayList<String>()
+    var originalPathList = ArrayList<String>()
 
     private var slideModels : ArrayList<SlideModel> = ArrayList<SlideModel>()
 
@@ -56,7 +57,7 @@ class BoardDetailViewActivity : AppCompatActivity() {
         date = intent.getStringExtra("DATE")    //작성일자
         replyCount = intent.getStringExtra("ReplyCount")    //댓글개수
         pathList = intent.getSerializableExtra("pathList") as ArrayList<String>
-
+        originalPathList = intent.getSerializableExtra("originalPathList") as ArrayList<String>
         writerTxt.text = "작성자 : $writer"
         dateTxt.text = "작성일자 : $date"
         contents_edit.text = content
@@ -149,7 +150,7 @@ class BoardDetailViewActivity : AppCompatActivity() {
         intent.putExtra("DATE",date)
 
         var list = java.util.ArrayList<String>()
-
+        var originalList = ArrayList<String>()
         for (i in pathList.indices) {
             if(pathList[i].isNotEmpty()){
                 if(pathList[i].contains("deleteiconblack2")) {
@@ -162,9 +163,19 @@ class BoardDetailViewActivity : AppCompatActivity() {
                 continue
             }
         }
+
+        for(i in originalPathList.indices){
+            if(originalPathList[i].isNotEmpty()){
+                originalList.add(originalPathList[i])
+            }
+        }
+
+        intent.putExtra("originalPathList",originalList)
         intent.putExtra("pathList",list)
         intent.putExtra("ReplyCount", replyCount)
+        finish()
         startActivity(intent)
+
         Toast.makeText(this, "수정", Toast.LENGTH_SHORT).show()
     }
 

@@ -42,6 +42,10 @@ public interface BoardApi {
                                        @Part MultipartBody.Part image2,
                                        @Part MultipartBody.Part image3,
                                        @Part MultipartBody.Part image4,
+                                       @Part("originalPath") RequestBody originalPath,
+                                       @Part("originalPath2") RequestBody originalPath2,
+                                       @Part("originalPath3") RequestBody originalPath3,
+                                       @Part("originalPath4") RequestBody originalPath4,
                                        @Part("TOKEN") RequestBody token);
 
 
@@ -63,6 +67,24 @@ public interface BoardApi {
                                    @Part("CONTENT") RequestBody content,
                                    @Part("DATE") RequestBody date,
                                    @Part MultipartBody.Part image);
+
+    // 게시판 Update (이미지 o)
+    @Multipart
+    @POST("BoardUpdateTest.php")
+    Call<ResponseBody> TestUpdateBoard(@Part("Seq") RequestBody seq,
+                                   @Part("USER") RequestBody user,
+                                   @Part("TITLE") RequestBody title,
+                                   @Part("CONTENT") RequestBody content,
+                                   @Part("DATE") RequestBody date,
+                                   @Part MultipartBody.Part image,
+                                   @Part MultipartBody.Part image2,
+                                   @Part MultipartBody.Part image3,
+                                   @Part MultipartBody.Part image4,
+                                   @Part("originalPath") RequestBody originalPath,
+                                   @Part("originalPath2") RequestBody originalPath2,
+                                   @Part("originalPath3") RequestBody originalPath3,
+                                   @Part("originalPath4") RequestBody originalPath4);
+
 
     // 게시판 Update (이미지 x)
     @Multipart

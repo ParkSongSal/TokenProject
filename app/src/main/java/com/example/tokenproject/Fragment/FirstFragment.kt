@@ -159,11 +159,16 @@ class FirstFragment : Fragment() {
                     val PATH2 : String? = result[i].path2
                     val PATH3 : String? = result[i].path3
                     val PATH4 : String? = result[i].path4
+                    val oiginalPath1 : String? = result[i].originalPath
+                    val oiginalPath2 : String? = result[i].originalPath2
+                    val oiginalPath3 : String? = result[i].originalPath3
+                    val oiginalPath4 : String? = result[i].originalPath4
                     val reply_count: String = result[i].reply_count
                     val getServerdata =
-                        BoardModel(SEQ, USER, TITLE, CONTENT, DATE, PATH, PATH2, PATH3, PATH4, reply_count)
+                        BoardModel(SEQ, USER, TITLE, CONTENT, DATE, PATH, PATH2, PATH3, PATH4, oiginalPath1, oiginalPath2, oiginalPath3, oiginalPath4, reply_count)
                     boardList.add(getServerdata)
                     saveList.add(getServerdata)
+                    Log.d("TAG"," boardList : $boardList")
                     mAdapter = BoardAdapter(activity!!, boardList, saveList)
                     mRecycle_view!!.adapter = mAdapter
                     runAnimation()
@@ -231,8 +236,16 @@ class FirstFragment : Fragment() {
         list.add(boardList[event.position].path2.toString())
         list.add(boardList[event.position].path3.toString())
         list.add(boardList[event.position].path4.toString())
-
         mIntent!!.putExtra("pathList",list)
+
+        var originalList = ArrayList<String>()
+        originalList.add(boardList[event.position].originalPath.toString())
+        originalList.add(boardList[event.position].originalPath2.toString())
+        originalList.add(boardList[event.position].originalPath3.toString())
+        originalList.add(boardList[event.position].originalPath4.toString())
+        mIntent!!.putExtra("originalPathList",originalList)
+
+
 
         mIntent!!.putExtra("PATH", boardList[event.position].path)
         mIntent!!.putExtra("PATH2", boardList[event.position].path2)

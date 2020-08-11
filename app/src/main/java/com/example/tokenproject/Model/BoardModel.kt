@@ -11,5 +11,9 @@ data class BoardModel(
     var path2 : String?,
     var path3 : String?,
     var path4 : String?,
+    var originalPath : String?,
+    var originalPath2 : String?,
+    var originalPath3 : String?,
+    var originalPath4 : String?,
     var reply_count: String
 )

@@ -11,6 +11,10 @@ public class ResultBoard {
     String path2;
     String path3;
     String path4;
+    String originalPath;
+    String originalPath2;
+    String originalPath3;
+    String originalPath4;
     String Lasted_Date;
     String Nick_Name;
     String Student_Id;
@@ -96,6 +100,38 @@ public class ResultBoard {
         this.path4 = path4;
     }
 
+    public String getOriginalPath() {
+        return originalPath;
+    }
+
+    public void setOriginalPath(String originalPath) {
+        this.originalPath = originalPath;
+    }
+
+    public String getOriginalPath2() {
+        return originalPath2;
+    }
+
+    public void setOriginalPath2(String originalPath2) {
+        this.originalPath2 = originalPath2;
+    }
+
+    public String getOriginalPath3() {
+        return originalPath3;
+    }
+
+    public void setOriginalPath3(String originalPath3) {
+        this.originalPath3 = originalPath3;
+    }
+
+    public String getOriginalPath4() {
+        return originalPath4;
+    }
+
+    public void setOriginalPath4(String originalPath4) {
+        this.originalPath4 = originalPath4;
+    }
+
     public String getLasted_Date() {
         return Lasted_Date;
     }
@@ -141,6 +177,10 @@ public class ResultBoard {
                 ", path2='" + path2 + '\'' +
                 ", path3='" + path3 + '\'' +
                 ", path4='" + path4 + '\'' +
+                ", originalPath='" + originalPath + '\'' +
+                ", originalPath2='" + originalPath2 + '\'' +
+                ", originalPath3='" + originalPath3 + '\'' +
+                ", originalPath4='" + originalPath4 + '\'' +
                 ", Lasted_Date='" + Lasted_Date + '\'' +
                 ", Nick_Name='" + Nick_Name + '\'' +
                 ", Student_Id='" + Student_Id + '\'' +
