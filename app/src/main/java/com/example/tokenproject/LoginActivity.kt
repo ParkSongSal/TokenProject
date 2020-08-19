@@ -286,7 +286,7 @@ class LoginActivity : AppCompatActivity() {
 
                     editor.putString("userId",Id)
                     editor.apply()
-
+                    
 
                     //로그인 성공
                     startActivity(Intent(this@LoginActivity, MainActivity::class.java))
